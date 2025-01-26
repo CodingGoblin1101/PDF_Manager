@@ -1,0 +1,29 @@
+ScreenManager:
+    MainScreen:
+        name: 'MainScreen'
+        manager: 'screen_manager'
+
+<MainScreen>
+    name:'MainScreen'
+    MDButton:
+        style: 'filled'
+        pos_hint: {"center_x": .2, "center_y": .5}
+        on_press: root.select_file()
+        #on_press: 
+        MDButtonText:
+            text: 'convert'
+
+    MDButton:
+        style: 'filled'
+        pos_hint: {"center_x": .4, "center_y": .5}
+        on_press: root.select_file()
+        MDButtonText:
+            text: 'merge'
+
+
+    MDButton:
+        style: 'filled'
+        pos_hint: {"center_x": .6, "center_y": .5}
+        on_press: root.select_file()
+        MDButtonText:
+            text: 'split'
