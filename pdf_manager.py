@@ -6,6 +6,18 @@ import img2pdf
 from PIL import Image
 import os
 
+
+def convert(path, save_path):
+        #print('list?')
+        #print(img_path, img_path[0] )
+        image = Image.open(path[0])
+        pdf_bytes = img2pdf.convert(image.filename)
+        file = open(str(save_path[0]), 'wb')
+        file.write(pdf_bytes)
+        ###TO DO: .pdf anhängen automatisch beim speichern -- wie?
+        image.close()
+        file.close()
+
 class MainApp(MDApp):
     def build(self):
         self.theme_cls.theme_style = 'Dark'
@@ -20,36 +32,23 @@ class MainScreen(Screen):
 
     def select_file(self):
         from plyer import filechooser
-        filechooser.open_file(on_selection = self.selected)
+        path = filechooser.open_file(on_selection = self.selected)
+        save_path = self.save_file()
+        convert(path, save_path)
 
+    def save_file(self):
+        from plyer import filechooser
+        save_path = filechooser.save_file(on_selection = self.selected)
+        print(save_path)
+        return save_path
+    
     def selected(self, selection):
         print(selection[0])
         path = selection[0]
         return path
 
-    def convert(path):
-        img_path = path
-        image = Image.open(img_path)
-        pdf_bytes = img2pdf.convert(image.filename)
-        pdf_path = self.save_file
-        ###### Problem: wie den save path hier reinkriegen? Nicht auswählbar weil über save_file function, weil diese function zwingend in
-        ###### MainScreen class sein muss, Objekt aber noch nicht existiert weshalb save_file() nicht ausführbar ist.
-        file = open(pdf_path, 'wb')
-        file.write(pdf_bytes)
-        image.close()
-        file.close()
-
-    def save_file(self):
-        from plyer import filechooser
-        filechooser.save_file(on_selection = self.selected)
-        #print(selection[0])
-        #save_path = "selection[0]"
-        #return save_path
-        return self
-
     def cancel():
         pass
-
 
     def merge():
         pass
