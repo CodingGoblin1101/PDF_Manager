@@ -13,7 +13,6 @@ def convert(path, save_path):
         pdf_bytes = img2pdf.convert(image.filename)
         file = open(str(save_path[0]), 'wb')
         file.write(pdf_bytes)
-        ###TODO: .pdf anhängen automatisch beim speichern -- wie?
         image.close()
         file.close()
 
