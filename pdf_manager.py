@@ -6,9 +6,9 @@ import img2pdf
 from PIL import Image
 import os
 
+#TODO: refactor IndexError handling // handle bug opening second window after closing first
 
 def convert(path, save_path):
-        #print(img_path, img_path[0] )
         image = Image.open(path[0])
         pdf_bytes = img2pdf.convert(image.filename)
         file = open(str(save_path[0]), 'wb')
@@ -30,20 +30,28 @@ class MainScreen(Screen):
 
     def select_file(self):
         from plyer import filechooser
-        path = filechooser.open_file(on_selection = self.selected)
-        save_path = self.save_file()
-        convert(path, save_path)
+        try:
+            path = filechooser.open_file(on_selection = self.selected)
+            save_path = self.save_file()
+            convert(path, save_path)
+        except IndexError:
+            return
 
     def save_file(self):
         from plyer import filechooser
-        save_path = (filechooser.save_file(on_selection = self.selected))
-        save_path[0] += '.pdf'
-        return save_path
-    
+        try:
+            save_path = (filechooser.save_file(on_selection = self.selected))
+            save_path[0] += '.pdf'
+            return save_path
+        except IndexError:
+            return
+
     def selected(self, selection):
-        print(selection[0])
-        path = selection[0]
-        return path
+        try:
+            path = selection[0]
+            return path
+        except IndexError:
+            return
 
     def cancel():
         pass
