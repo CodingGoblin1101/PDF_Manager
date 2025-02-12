@@ -8,13 +8,12 @@ import os
 
 
 def convert(path, save_path):
-        #print('list?')
         #print(img_path, img_path[0] )
         image = Image.open(path[0])
         pdf_bytes = img2pdf.convert(image.filename)
         file = open(str(save_path[0]), 'wb')
         file.write(pdf_bytes)
-        ###TO DO: .pdf anhängen automatisch beim speichern -- wie?
+        ###TODO: .pdf anhängen automatisch beim speichern -- wie?
         image.close()
         file.close()
 
@@ -26,7 +25,7 @@ class MainApp(MDApp):
     
 class MainScreen(Screen):
     def __init__(self, **kwargs):
-	    super().__init__(**kwargs)
+        super().__init__(**kwargs)
     # **kwargs -> belieblig viele Argumente annehmbar, als dictionary wiedergegeben
     # super(). -> ruft die __init__ Methode der Eltern auf, bedeutet Eltern nehmen gleiche Argumente entgegen
 
@@ -38,8 +37,8 @@ class MainScreen(Screen):
 
     def save_file(self):
         from plyer import filechooser
-        save_path = filechooser.save_file(on_selection = self.selected)
-        print(save_path)
+        save_path = (filechooser.save_file(on_selection = self.selected))
+        save_path[0] += '.pdf'
         return save_path
     
     def selected(self, selection):
