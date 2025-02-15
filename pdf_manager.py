@@ -1,4 +1,5 @@
 from pypdf import PdfReader
+from pypdf import PdfWriter
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen
@@ -39,11 +40,30 @@ class MainScreen(Screen):
             path = selection[0]
             return path
 
-    def cancel():
+    def cancel(self):
         pass
 
-    def merge():
-        pass
+    def merge(self):
+        first_file = self.select_file()
+        second_file = self.select_file()
+
+        if '.gif' in first_file[0] or 'gif' in second_file[0]:
+            first_pdf = Image.open(first_file[0])
+            second_pdf = Image.open(second_file[0])
+
+            merged =  img2pdf.convert(first_pdf.filename, second_pdf.filename)
+            save_path = self.save_file()
+            file = open(str(save_path[0]), 'wb')
+            file.write(merged)
+            return
+
+        else:
+            merger = PdfWriter()
+            for pdf in [first_file[0], second_file[0]]:
+                merger.append(pdf)
+            save_path = self.save_file()
+            merger.write(save_path[0])
+            merger.close()
 
     def convert(self):
         path = self.select_file()
