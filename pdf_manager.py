@@ -7,8 +7,6 @@ import img2pdf
 from PIL import Image
 import os
 
-from setuptools.sandbox import save_path
-
 
 class MainApp(MDApp):
     def build(self):
@@ -47,38 +45,44 @@ class MainScreen(Screen):
         first_file = self.select_file()
         second_file = self.select_file()
 
-        if '.gif' in first_file[0] or 'gif' in second_file[0]:
-            first_pdf = Image.open(first_file[0])
-            second_pdf = Image.open(second_file[0])
+        path_list = [first_file[0], second_file[0]]
 
-            merged =  img2pdf.convert(first_pdf.filename, second_pdf.filename)
-            save_path = self.save_file()
-            file = open(str(save_path[0]), 'wb')
-            file.write(merged)
-            return
+        for data in path_list:
+            if '.pdf' in data:
+                merger = PdfWriter()
+                merger.append(data)
+                save_path = self.save_file()
+                merger.write(save_path[0])
+                merger.close()
 
-        else:
-            merger = PdfWriter()
-            for pdf in [first_file[0], second_file[0]]:
-                merger.append(pdf)
-            save_path = self.save_file()
-            merger.write(save_path[0])
-            merger.close()
+            else:
+                img = Image.open(data)
+                #second_pdf = Image.open(second_file[0])
+                merged =  img2pdf.convert(img.filename, second_pdf.filename)
+                save_path = self.save_file()
+                file = open(str(save_path[0]), 'wb')
+                file.write(merged)
+                return
+            #TO DO: how to handle if on of the files is img one is pdf
+
 
     def convert(self):
-        path = self.select_file()
-        if path:
-            image = Image.open(path[0])
-            pdf_bytes = img2pdf.convert(image.filename)
-            save_path = self.save_file()
+        try:
+            path = self.select_file()
+            if path:
+                image = Image.open(path[0])
+                pdf_bytes = img2pdf.convert(image.filename)
+                save_path = self.save_file()
 
-            if save_path:
-                file = open(str(save_path[0]), 'wb')
-                file.write(pdf_bytes)
-                image.close()
-                file.close()
-
-    def split():
+                if save_path:
+                    file = open(str(save_path[0]), 'wb')
+                    file.write(pdf_bytes)
+                    image.close()
+                    file.close()
+        except:
+            return
+            # add warning window here
+    def split(self):
         pass
 
 if __name__ == "__main__":
