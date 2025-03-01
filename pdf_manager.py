@@ -41,29 +41,19 @@ class MainScreen(Screen):
     def cancel(self):
         pass
 
-    def merge(self):
+    def merge_pdf(self):
         first_file = self.select_file()
         second_file = self.select_file()
 
         path_list = [first_file[0], second_file[0]]
+        merger = PdfWriter()
 
         for data in path_list:
-            if '.pdf' in data:
-                merger = PdfWriter()
                 merger.append(data)
-                save_path = self.save_file()
-                merger.write(save_path[0])
-                merger.close()
+        save_path = self.save_file()
+        merger.write(save_path[0])
+        merger.close()
 
-            else:
-                img = Image.open(data)
-                #second_pdf = Image.open(second_file[0])
-                merged =  img2pdf.convert(img.filename, second_pdf.filename)
-                save_path = self.save_file()
-                file = open(str(save_path[0]), 'wb')
-                file.write(merged)
-                return
-            #TO DO: how to handle if on of the files is img one is pdf
 
 
     def convert(self):
